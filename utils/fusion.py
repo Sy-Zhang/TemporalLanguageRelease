@@ -42,7 +42,7 @@ def read_results_file(results_file):
 
 def get_data(split):
 
-    data = json.load(open('initial_release_data/%s_%s.json' %(args.dataset, split), 'r'))
+    data = json.load(open('data/%s_%s.json' %(args.dataset, split), 'r'))
     if 'tempoTL' in args.dataset:
 
         eval_datasets = [(('didemo'), [d for d in data if d['annotation_id'].split('_')[0] not in \
@@ -53,7 +53,7 @@ def get_data(split):
     elif 'tempoHL' in args.dataset:
 
         eval_datasets = [(('didemo'), [d for d in data if d['annotation_id'].split('_')[0] not in \
-                         set([u'before', u'after', u'then'])]),
+                         set([u'before', u'after', u'then', u'while'])]),
                          (('before'), [d for d in data if u'before' in d['annotation_id']]),
                          (('after'), [d for d in data if u'after' in d['annotation_id']]),
                          (('then'), [d for d in data if u'then' in d['annotation_id']]),

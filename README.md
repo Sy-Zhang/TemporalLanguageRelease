@@ -23,7 +23,7 @@ I trained all my models with the [BVLC caffe version](https://github.com/BVLC/ca
 
 **Getting Started**
 
-Run [setup.sh](setup.sh) to download pre-extracted features, data (TEMPO-HL and TEMPO-TL), and pre-trained models.  If you are only interested in the data (not using/replicating my code), please download the datasets [here](https://people.eecs.berkeley.edu/~lisa_anne/initial_release_data.zip).
+Run [setup.sh](setup.sh) to download pre-extracted features, data (TEMPO-HL and TEMPO-TL), and pre-trained models.  If you are only interested in the data (not using/replicating my code), please download the datasets [here](https://people.eecs.berkeley.edu/~lisa_anne/tempo/initial_release_data.zip).
 
 ### Training and Evaluating Models
 
@@ -57,12 +57,13 @@ You train and evaluate models using scripts in the ```experiments``` folder.  To
 * Snapshot folder (S): Where you would like to save your snaphots.  Snapshots automatically saved in ```snapshots``` folder
 * GPU (G): which GPU to train on
 
-An example command is:
+Example commands are:
 
 ```
-./experiments/train.sh -M mllc -D Tempo-HL -F flow -G 0
+./experiments/train.sh -M mllc -D tempoHL -F rgb -G 0
+./experiments/train.sh -M mllc -D tempoHL -F flow -G 1
 ```
-This will train an mllc flow model.  
+The first command trains mllc on tempoHL with rgb features on GPU 0 and the second command trains mllc on tempoHL with flow features on GPU 1.  Snapshots will automatically be saved into the ```snapshots``` folder with tags ```rgb_mllc_tempoHL``` and ```flow_mllc_tempoHL```
 
 Run ```./experiments/train.sh -H``` for help.
 
@@ -81,10 +82,11 @@ To evaluate models, look at the ```experiments/eval.sh```.  This bash script tak
 An example command is:
 
 ```
-./experiments/eval.sh -M mllc -D Tempo-HL -F retrain_mllc_flow -R retrain_mllc_rgb -G 0 -Q
+./experiments/eval.sh -R rgb_mllc_tempoHL -F flow_mllc_tempoHL -D tempoHL -M mllc
 ```
 
-Note that if the models corresponding to ```retrain_mllc_flow``` and ```retrain_mllc_rgb``` have never been evaluated before, running with ```-Q``` will throw an error.
+This will evaluate the two models, corresponding to snapshots saved in ```flow_mllc_tempoHL``` and ```rgb_mllc_tempoHL```, trained using the train commands above.
+After you have evaluated the models once, use the flag ```-Q``` to used cached values and speed up the evaluation.
 
 Run ```./experiments/eval.sh -H``` for help.
 
